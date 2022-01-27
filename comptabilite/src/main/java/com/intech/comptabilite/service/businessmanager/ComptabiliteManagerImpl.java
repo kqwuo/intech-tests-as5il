@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.validation.Configuration;
 import javax.validation.ConstraintViolation;
@@ -139,6 +141,18 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
 
         // TODO ===== RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
+        Pattern p = Pattern.compile("^([A-Z]{2})-([0-9]{4})/([0-9]{5})");
+        Matcher m = p.matcher(pEcritureComptable.getReference());
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(pEcritureComptable.getDate());
+        if (!m.matches() || m.groupCount() != 3 ||
+    		Integer.parseInt(m.group(2)) != calendar.get(Calendar.YEAR) ||
+    		Integer.parseInt(m.group(3)) != pEcritureComptable.getId() ) {
+        	
+        	throw new FunctionalException(
+        			"Le format et le contenu de la référence sont incorrects");
+        }
     }
 
 

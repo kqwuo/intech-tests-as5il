@@ -32,7 +32,7 @@ public class EcritureComptable {
 	@NotNull
 	private JournalComptable journal;
 
-	@Pattern(regexp = "\\d{1,5}-\\d{4}/\\d{5}")
+	@Pattern(regexp = "^([A-Z]{2})-([0-9]{4})/([0-9]{5})")
 	private String reference;
 
 	@NotNull
