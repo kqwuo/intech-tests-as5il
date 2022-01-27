@@ -92,6 +92,26 @@ public class ComptabiliteManagerImplTest {
         );
                 
     }
+    
+    @Test
+    public void checkEcritureComptableMustHave2Lines() throws Exception {
+    	EcritureComptable vEcritureComptable;
+        vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new Date());
+        vEcritureComptable.setLibelle("Libelle");
+        vEcritureComptable.setId(1);
+        vEcritureComptable.setReference("AC-2022/00001");
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                                                                                 null, new BigDecimal(123),
+                                                                                 new BigDecimal(123)));
+        
+        Assertions.assertThrows(FunctionalException.class,
+        		() -> {
+        			manager.checkEcritureComptableUnit(vEcritureComptable);
+        		}
+        );
+    }
 
     @Test
     public void checkEcritureComptableUnitRG5() throws Exception {
